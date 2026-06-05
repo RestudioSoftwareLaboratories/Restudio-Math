@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Restudio Math</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: #cccccc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Top bar container */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        /* First row - Logo (Black background) */
+        .top-bar-primary {
+            background: #000000;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 12px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .top-bar img.logo {
+            height: 28px;
+            width: auto;
+        }
+        .top-bar .brand-text {
+            font-family: 'Tiny5', sans-serif;
+            font-size: 22px;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        /* Second row - Tools (Background #2D2D2D) */
+        .top-bar-tools {
+            background: #2D2D2D;
+            padding: 8px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 24px;
+            border-bottom: 1px solid #3d3d3d;
+            font-size: 12px;
+        }
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .tool-group-label {
+            color: #aaa;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        .tool-btn {
+            background: #3d3d3d;
+            border: none;
+            color: #e0e0e0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tool-btn:hover {
+            background: #094771;
+        }
+        .tool-btn .material-icons {
+            font-size: 14px;
+        }
+        .symbols-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .sym-btn {
+            background: #3d3d3d;
+            border: 1px solid #4a4a4a;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #fff;
+            font-family: monospace;
+        }
+        .sym-btn:hover {
+            background: #094771;
+            transform: scale(1.02);
+        }
+        /* Main container */
+        .main-container {
+            margin-top: 130px;
+            padding: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            flex: 1;
+            margin-bottom: 60px;
+        }
+        /* Preview and input area */
+        .preview-area {
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #3c3c3c;
+        }
+        .preview-title {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 12px;
+        }
+        .latex-input {
+            width: 100%;
+            padding: 14px;
+            background: #1e1e1e;
+            border: 1px solid #4a4a4a;
+            color: #fff;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 16px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+        .latex-input:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+        .preview-box {
+            background: #1e1e1e;
+            border: 1px dashed #4a4a4a;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            font-size: 24px;
+            min-height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: auto;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .info-note {
+            background: #252526;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+            margin-top: 16px;
+        }
+        /* Bottom bar */
+        .bottom-bar {
+            background: #2b9895;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            z-index: 100;
+            color: white;
+            font-size: 13px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .bottom-bar .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bottom-bar .material-icons {
+            font-size: 18px;
+        }
+        .bottom-bar-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: 0.15s;
+        }
+        .bottom-bar-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        hr {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .top-bar-tools {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .main-container {
+                margin-top: 180px;
+                margin-bottom: 80px;
+            }
+            .bottom-bar {
+                height: auto;
+                padding: 8px 16px;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Integrated top bar -->
+    <header class="top-bar">
+        <!-- First row: Logo - Black background -->
+        <div class="top-bar-primary">
+            <div class="top-left">
+                <img class="logo" src="https://i.postimg.cc/s2j0rzBZ/swrh-restudio.png" alt="Logo">
+                <span class="brand-text">math</span>
+            </div>
+        </div>
+        
+        <!-- Second row: All tools and symbols - Background #2D2D2D -->
+        <div class="top-bar-tools">
+            <!-- Operations group -->
+            <div class="tool-group">
+                <span class="tool-group-label">OPERATIONS</span>
+                <button class="tool-btn" id="newBtn"><span class="material-icons">note_add</span> New</button>
+                <button class="tool-btn" id="openBtn"><span class="material-icons">folder_open</span> Open .REMT</button>
+                <button class="tool-btn" id="saveBtn"><span class="material-icons">save</span> Export .REMT</button>
+            </div>
+            
+            <!-- Insert group -->
+            <div class="tool-group">
+                <span class="tool-group-label">INSERT</span>
+                <button class="tool-btn" id="fracBtn"><span class="material-icons">numerator_denominator</span> Fraction</button>
+                <button class="tool-btn" id="rootBtn"><span class="material-icons">calculate</span> Root</button>
+                <button class="tool-btn" id="powerBtn"><span class="material-icons">exposure</span> Power</button>
+                <button class="tool-btn" id="katexBtn"><span class="material-icons">edit_note</span> KaTeX Help</button>
+            </div>
+            
+            <!-- Direct symbols group -->
+            <div class="tool-group">
+                <span class="tool-group-label">SYMBOLS</span>
+                <div class="symbols-group" id="symbolsGrid">
+                    <button class="sym-btn" data-sym="+">+</button>
+                    <button class="sym-btn" data-sym="-">-</button>
+                    <button class="sym-btn" data-sym="\\times">×</button>
+                    <button class="sym-btn" data-sym="\\div">÷</button>
+                    <button class="sym-btn" data-sym="=">=</button>
+                    <button class="sym-btn" data-sym="\\neq">≠</button>
+                    <button class="sym-btn" data-sym="<">&lt;</button>
+                    <button class="sym-btn" data-sym=">">&gt;</button>
+                    <button class="sym-btn" data-sym="\\leq">≤</button>
+                    <button class="sym-btn" data-sym="\\geq">≥</button>
+                    <button class="sym-btn" data-sym="\\pi">π</button>
+                    <button class="sym-btn" data-sym="\\alpha">α</button>
+                    <button class="sym-btn" data-sym="\\beta">β</button>
+                    <button class="sym-btn" data-sym="\\gamma">γ</button>
+                    <button class="sym-btn" data-sym="\\infty">∞</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Preview area only - all tools are in the top bar -->
+        <div class="preview-area">
+            <div class="preview-title">LATEX EXPRESSION</div>
+            <textarea id="latexInput" class="latex-input" rows="3" placeholder="Write LaTeX code here...&#10;Example: \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}"></textarea>
+            
+            <div class="preview-title">PREVIEW</div>
+            <div id="previewBox" class="preview-box">
+                \( \displaystyle \text{Equation will appear here...} \)
+            </div>
+            <div id="errorMsg" class="error-message"></div>
+            
+            <div class="info-note">
+                Use buttons in the top bar to insert symbols and operations. The preview updates automatically using KaTeX.
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <footer class="bottom-bar">
+        <div class="status">
+            <span class="material-icons">check_circle</span>
+            <span>Ready</span>
+        </div>
+        <div class="status">
+            <span class="material-icons">functions</span>
+            <span id="charCount">0</span>
+            <span>chars</span>
+        </div>
+        <button class="bottom-bar-btn" id="clearBtn">
+            <span class="material-icons">delete_sweep</span>
+            Clear All
+        </button>
+        <button class="bottom-bar-btn" id="copyBtn">
+            <span class="material-icons">content_copy</span>
+            Copy LaTeX
+        </button>
+    </footer>
+
+    <script>
+        // DOM elements
+        const latexInput = document.getElementById('latexInput');
+        const previewBox = document.getElementById('previewBox');
+        const errorMsg = document.getElementById('errorMsg');
+        const charCountSpan = document.getElementById('charCount');
+
+        // Update preview using KaTeX
+        function updatePreview() {
+            let latex = latexInput.value.trim();
+            if (latex === "") {
+                previewBox.innerHTML = '\\( \\displaystyle \\text{Equation will appear here...} \\)';
+                errorMsg.textContent = '';
+                charCountSpan.textContent = latexInput.value.length;
+                return;
+            }
+            try {
+                const rendered = katex.renderToString(latex, {
+                    throwOnError: true,
+                    displayMode: true
+                });
+                previewBox.innerHTML = rendered;
+                errorMsg.textContent = '';
+            } catch (err) {
+                errorMsg.textContent = 'Syntax error: ' + err.message;
+                // Attempt fallback to show partial rendering
+                try {
+                    const fallback = katex.renderToString(latex, { throwOnError: false, displayMode: true });
+                    previewBox.innerHTML = fallback;
+                } catch(e) {
+                    previewBox.innerHTML = '<span style="color:#e74c3c;">Invalid LaTeX expression</span>';
+                }
+            }
+            charCountSpan.textContent = latexInput.value.length;
+        }
+
+        // Insert text at cursor position
+        function insertAtCursor(text) {
+            const start = latexInput.selectionStart;
+            const end = latexInput.selectionEnd;
+            const value = latexInput.value;
+            latexInput.value = value.substring(0, start) + text + value.substring(end);
+            latexInput.focus();
+            const newCursorPos = start + text.length;
+            latexInput.selectionStart = newCursorPos;
+            latexInput.selectionEnd = newCursorPos;
+            updatePreview();
+        }
+
+        // Export file as .REMT
+        function exportAsRemt() {
+            const content = latexInput.value;
+            if (!content.trim()) {
+                alert('No content to export');
+                return;
+            }
+            const blob = new Blob([content], { type: 'text/plain' });
+            const a = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            a.href = url;
+            a.download = 'equation.remt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Copy LaTeX code to clipboard
+        function copyLatex() {
+            const content = latexInput.value;
+            if (!content.trim()) {
+                alert('No content to copy');
+                return;
+            }
+            navigator.clipboard.writeText(content).then(() => {
+                alert('LaTeX code copied to clipboard');
+            }).catch(() => {
+                alert('Failed to copy');
+            });
+        }
+
+        // ---- Event listeners for top bar buttons ----
+        document.getElementById('newBtn').addEventListener('click', () => {
+            if (latexInput.value.trim() && confirm('Clear current content?')) {
+                latexInput.value = '';
+                updatePreview();
+            } else if (!latexInput.value.trim()) {
+                latexInput.value = '';
+                updatePreview();
+            }
+        });
+        
+        document.getElementById('openBtn').addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.remt,.json,.txt';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        try {
+                            const content = ev.target.result;
+                            latexInput.value = content;
+                            updatePreview();
+                        } catch(err) {
+                            alert('Error reading file');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        });
+        
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            exportAsRemt();
+        });
+        
+        document.getElementById('fracBtn').addEventListener('click', () => {
+            insertAtCursor('\\frac{}{}');
+        });
+        
+        document.getElementById('rootBtn').addEventListener('click', () => {
+            insertAtCursor('\\sqrt{}');
+        });
+        
+        document.getElementById('powerBtn').addEventListener('click', () => {
+            insertAtCursor('^{}');
+        });
+        
+        document.getElementById('katexBtn').addEventListener('click', () => {
+            alert('KaTeX Math Editor Help\n\nYou can write any supported LaTeX:\n- Fractions: \\frac{a}{b}\n- Square roots: \\sqrt{x}\n- Exponents: x^{n}\n- Integrals: \\int_{0}^{\\infty}\n- Summations: \\sum_{i=1}^{n}\n- Greek letters: \\alpha, \\beta, \\gamma, \\pi\n- Infinity: \\infty\n- Quadratic formula:\n\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}');
+            insertAtCursor('\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}');
+        });
+        
+        // Symbol buttons
+        document.querySelectorAll('.sym-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                let sym = btn.getAttribute('data-sym');
+                if (sym === '\\times') insertAtCursor(' \\times ');
+                else if (sym === '\\div') insertAtCursor(' \\div ');
+                else if (sym === '\\neq') insertAtCursor(' \\neq ');
+                else if (sym === '\\leq') insertAtCursor(' \\leq ');
+                else if (sym === '\\geq') insertAtCursor(' \\geq ');
+                else if (sym === '\\pi') insertAtCursor(' \\pi ');
+                else if (sym === '\\alpha') insertAtCursor(' \\alpha ');
+                else if (sym === '\\beta') insertAtCursor(' \\beta ');
+                else if (sym === '\\gamma') insertAtCursor(' \\gamma ');
+                else if (sym === '\\infty') insertAtCursor(' \\infty ');
+                else insertAtCursor(sym);
+            });
+        });
+        
+        // Bottom bar buttons
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear everything?')) {
+                latexInput.value = '';
+                updatePreview();
+            }
+        });
+        
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            copyLatex();
+        });
+        
+        // Live update on input
+        latexInput.addEventListener('input', updatePreview);
+        
+        // Initial preview render
+        updatePreview();
+    </script>
+</body>
+</html>
