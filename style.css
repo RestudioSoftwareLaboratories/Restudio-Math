@@ -1,0 +1,236 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1e1e1e;
+    color: #cccccc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+/* Top bar container */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+/* First row - Logo (Black background) */
+.top-bar-primary {
+    background: #000000;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    border-bottom: 1px solid #2a2a2a;
+}
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.top-bar img.logo {
+    height: 28px;
+    width: auto;
+}
+.top-bar .brand-text {
+    font-family: 'Tiny5', sans-serif;
+    font-size: 22px;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+/* Second row - Tools (Background #2D2D2D) */
+.top-bar-tools {
+    background: #2D2D2D;
+    padding: 8px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    border-bottom: 1px solid #3d3d3d;
+    font-size: 12px;
+}
+.tool-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.tool-group-label {
+    color: #aaa;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+.tool-btn {
+    background: #3d3d3d;
+    border: none;
+    color: #e0e0e0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.tool-btn:hover {
+    background: #094771;
+}
+.tool-btn .ti {
+    font-size: 14px;
+}
+.symbols-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.sym-btn {
+    background: #3d3d3d;
+    border: 1px solid #4a4a4a;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.1s;
+    color: #fff;
+    font-family: monospace;
+}
+.sym-btn:hover {
+    background: #094771;
+    transform: scale(1.02);
+}
+/* Main container */
+.main-container {
+    margin-top: 130px;
+    padding: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    flex: 1;
+    margin-bottom: 60px;
+}
+/* Preview and input area */
+.preview-area {
+    background: #2d2d2d;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #3c3c3c;
+}
+.preview-title {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 12px;
+}
+.latex-input {
+    width: 100%;
+    padding: 14px;
+    background: #1e1e1e;
+    border: 1px solid #4a4a4a;
+    color: #fff;
+    border-radius: 10px;
+    font-family: monospace;
+    font-size: 16px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+.latex-input:focus {
+    outline: none;
+    border-color: #007acc;
+}
+.preview-box {
+    background: #1e1e1e;
+    border: 1px dashed #4a4a4a;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    font-size: 24px;
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+}
+.error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 10px;
+    text-align: center;
+}
+.info-note {
+    background: #252526;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 16px;
+}
+/* Bottom bar */
+.bottom-bar {
+    background: #2b9895;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    z-index: 100;
+    color: white;
+    font-size: 13px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.bottom-bar .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.bottom-bar .ti {
+    font-size: 18px;
+}
+.bottom-bar-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: 0.15s;
+}
+.bottom-bar-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+hr {
+    display: none;
+}
+@media (max-width: 768px) {
+    .top-bar-tools {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .main-container {
+        margin-top: 180px;
+        margin-bottom: 80px;
+    }
+    .bottom-bar {
+        height: auto;
+        padding: 8px 16px;
+        gap: 10px;
+    }
+}
